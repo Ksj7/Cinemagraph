@@ -1,6 +1,10 @@
 package com.cinemagra.holymoly.cinemagraph;
 
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
@@ -46,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private static final String OUTPUT_FILE = "/sdcard/videooutput.mp4";
     // 녹화 시간 - 10초
     private static final int RECORDING_TIME = 10000;
+    private static final int MY_CAMERA_REQUEST_CODE = 100;
+    private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
+    private final int MY_WRITE_EXTERNAL_STORAGE = 1;
 
     // 카메라 프리뷰를 설정한다
     private void setCameraPreview(SurfaceHolder holder){
@@ -199,8 +206,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
             // 비디오 사이즈를 수정하면 prepare 에러가 난다, 왜 그럴까? -> 특정 해상도가 있으며 이 해상도에만 맞출 수가 있다
-            recorder.setVideoSize(800, 480);
-            recorder.setVideoFrameRate(25);
+            //recorder.setVideoSize(800, 480);
+            //recorder.setVideoFrameRate(25);
             // Video/Audio 인코더 설정
             recorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
@@ -226,10 +233,25 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_RECORD_AUDIO);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_WRITE_EXTERNAL_STORAGE);
+        }
+
         // 세로화면 고정으로 처리한다
         //SCREEN_ORIENTATION_LANDSCAPE - 가로화면 고정
         //SCREEN_ORIENTATION_PORTRAIT - 세로화면 고정
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         // 프리뷰를 설정한다
         setPreview();
 
