@@ -14,10 +14,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-/**
- * Created by sujin.kim on 2017. 11. 24..
- */
-
 public class DrawRectangle extends View {
     Point[] points = new Point[4];
 
@@ -89,9 +85,6 @@ public class DrawRectangle extends View {
                 top + colorballs.get(0).getWidthOfBall() / 2,
                 right + colorballs.get(2).getWidthOfBall() / 2,
                 bottom + colorballs.get(2).getWidthOfBall() / 2, paint);
-
-        //draw the corners
-        BitmapDrawable bitmap = new BitmapDrawable();
         // draw the balls on the canvas
         paint.setColor(Color.BLUE);
         paint.setTextSize(18);

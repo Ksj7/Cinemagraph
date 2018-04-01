@@ -56,10 +56,10 @@ public class DecodeTask extends Thread {
                     mExtractor.selectTrack(i);
                     mDecoder = MediaCodec.createDecoderByType(mime);
                     try {
-                        Log.d(TAG, "format : " + format);
+                      //  Log.d(TAG, "format : " + format);
                         mDecoder.configure(format, surface, null, 0 /* Decoder */);
                     } catch (IllegalStateException e) {
-                        Log.e(TAG, "codec '" + mime + "' failed configuration. " + e);
+                      //  Log.e(TAG, "codec '" + mime + "' failed configuration. " + e);
                         return;
                     }
 

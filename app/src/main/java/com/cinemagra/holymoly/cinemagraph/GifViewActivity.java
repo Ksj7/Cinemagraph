@@ -14,15 +14,15 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
  * Created by sujin.kim on 2018. 3. 29..
  */
 
-public class GIFTestActivty extends AppCompatActivity {
+public class GifViewActivity extends AppCompatActivity {
     Uri uri;
-    ImageView rabbit;
+    ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.git_test);
+        setContentView(R.layout.gif_view);
 
-        rabbit = (ImageView) findViewById(R.id.gif_image);
+        imageView = findViewById(R.id.gif_image);
         someMethod();
     }
 
@@ -43,7 +43,7 @@ public class GIFTestActivty extends AppCompatActivity {
 
     private void processSurfaceView(final Uri fileUri) {
 
-        GlideDrawableImageViewTarget gifImage = new GlideDrawableImageViewTarget(rabbit);
+        GlideDrawableImageViewTarget gifImage = new GlideDrawableImageViewTarget(imageView);
         Glide.with(this).load(fileUri).into(gifImage);
     }
 

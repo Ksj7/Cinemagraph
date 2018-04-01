@@ -11,15 +11,12 @@ import android.view.SurfaceView;
 
 class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
-    Thread thread = null;
-    Context context;
+    private Context context;
     private Uri fileUri;
-    SurfaceHolder surfaceHolder;
     private DecodeTask decodeTask;
 
     public MySurfaceView(Context c, Uri uri) {
         super(c);
-        surfaceHolder = getHolder();
         context = c;
         fileUri = uri;
         getHolder().addCallback(this);
@@ -29,8 +26,6 @@ class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         // TODO Auto-generated method stub
-        surfaceHolder  = holder;
-
     }
 
     @Override
