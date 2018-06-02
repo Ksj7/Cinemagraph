@@ -12,14 +12,3 @@ Process바가 다 찰 때까지 기다리면 test.gif라는 이름으로 파일�
 
 ### VIEW GIF
 gif 뷰어가 없을 경우, 이 버튼을 눌러서 확인 가능
-
-## Demo
-
-### Original video
-
-<p align="center"> <img src ="./demo/origin.gif"><p>
-
-### Result
-
-<p align="center"> <img src ="./demo/demo.gif"><p>
- 
