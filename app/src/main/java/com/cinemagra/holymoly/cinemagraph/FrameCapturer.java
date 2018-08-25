@@ -1,17 +1,13 @@
 package com.cinemagra.holymoly.cinemagraph;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-
-import org.jcodec.api.FrameGrab;
-import org.jcodec.api.JCodecException;
-import org.jcodec.common.AndroidUtil;
-import org.jcodec.common.io.NIOUtils;
-import org.jcodec.common.model.Picture;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,23 +26,22 @@ public class FrameCapturer {
 
     private Handler handler;
 
-    public void run(String pathName, int[] position, final Handler handler, int width, int height) throws IOException, JCodecException {
+    public void run(Context context , Uri uri, int[] position, final Handler handler, int width, int height) throws IOException {
         this.handler = handler;
-
-        videoPathName = pathName;
         // 추출할 bitmap 을 담을 array 생성
         bitmapArrayList = new ArrayList<>();
 
-        File file = new File(videoPathName);
-        FrameGrab grab = FrameGrab.createFrameGrab(NIOUtils.readableChannel(file));
-        Picture picture;
+        MediaMetadataRetriever m = new MediaMetadataRetriever();
+        m.setDataSource(context, uri);
+        long timeInmillisec = Long.parseLong(m.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+        long duration = timeInmillisec / 1000;
+        long hours = duration / 3600;
+        long minutes = (duration - hours * 3600) / 60;
+        long seconds = duration - (hours * 3600 + minutes * 60) ;
+        int nTime = 1;
         Bitmap backgroundBitmap = null;
-        Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-        while (null != (picture = grab.getNativeFrame())) {
-            Bitmap bitmap = AndroidUtil.toBitmap(picture);// picture의 높이가 넓이보다 크면 90도 로테이션되서 bitmap에 담김
-            if(height > width) //그래서 높이가 넓이보다 크면 90도 회전해서 다시 저장
-                bitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap .getHeight(), matrix, true);
+        while( nTime <= seconds ) {
+            Bitmap bitmap = m.getFrameAtTime(nTime * 1000000);// picture의 높이가 넓이보다 크면 90도 로테이션되서 bitmap에 담김
             Bitmap resized = Bitmap.createScaledBitmap(bitmap, Math.round(width / 2), Math.round(height / 2), true);
             if (backgroundBitmap == null) {
                 backgroundBitmap = Bitmap.createBitmap(resized);
@@ -62,8 +57,8 @@ public class FrameCapturer {
                 }
             }
             bitmapArrayList.add(modified);
+            nTime++;
         }
-
         // Thread start
         thread = new Thread(new Runnable() {
             @Override
