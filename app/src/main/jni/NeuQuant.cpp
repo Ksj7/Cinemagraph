@@ -3,7 +3,7 @@
 //
 #include <com_cinemagra_holymoly_cinemagraph_AnimatedGifEncoder.h>
 #include <jni.h>
-typedef char BYTE;
+typedef unsigned char BYTE;
 
 /*
  * NeuQuant Neural-Net Quantization Algorithm
@@ -630,25 +630,21 @@ public :
 
     }
 
-
-    int **process() {
+    int** process() {
 
         learn();
 
         unbiasnet();
 
         inxbuild();
-
         return network;
-
     }
-
 
 };
 
 NeuQuant nq = NeuQuant();
 
-JNIEXPORT jintArray JNICALL
+JNIEXPORT jbyteArray JNICALL
 Java_com_cinemagra_holymoly_cinemagraph_AnimatedGifEncoder_getColorTab(JNIEnv *env, jobject obj,
                                                                         jbyteArray bytes, jint len,
                                                                         jint sample) {
@@ -671,22 +667,24 @@ Java_com_cinemagra_holymoly_cinemagraph_AnimatedGifEncoder_getColorTab(JNIEnv *e
         nq.bias[i] = 0;
     }
 
-    int **ret = nq.process();
+    int** network = nq.process();
 
-    int twoArrayTooneArray[1024];
-    int idx = 0;
+    const int ll = 3 * 256;
+    jbyte colorTab[ll];
+    int index[256];
+    for (int i = 0; i < 256; i++)
+        index[nq.network[i][3]] = i;
+    int k = 0;
     for (int i = 0; i < 256; i++) {
-        for (int j = 0; j < 4; j++) {
-            twoArrayTooneArray[idx++] = ret[i][j];
-        }
+        int j = index[i];
+        colorTab[k++] = (jbyte) (network[j][0]);
+        colorTab[k++] = (jbyte) (network[j][1]);
+        colorTab[k++] = (jbyte) (network[j][2]);
     }
+    jbyteArray ret = env->NewByteArray(ll);
+    env->SetByteArrayRegion (ret, 0, ll, colorTab);
+    return ret;
 
-    jintArray childeren = env->NewIntArray(1024);
-
-    jint *values = (jint *) twoArrayTooneArray;
-    env->SetIntArrayRegion(childeren, 0, 1024, values);
-
-    return childeren;
 }
 
 JNIEXPORT jint JNICALL

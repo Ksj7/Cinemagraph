@@ -15,7 +15,7 @@ public class AnimatedGifEncoder {
 		System.loadLibrary("NeuQuantCompile");
 	}
 
-	public native int[] getColorTab(byte[] bytes, int len, int sample);
+	public native byte[] getColorTab(byte[] bytes, int len, int sample);
 
 	public native int getIndex(int b, int g, int r);
 
@@ -62,60 +62,6 @@ public class AnimatedGifEncoder {
 	protected boolean sizeSet = false; // if false, get size from first frame
 
 	protected int sample = 10; // default sample interval for quantizer
-
-	/**
-	 * Sets the delay time between each frame, or changes it for subsequent frames
-	 * (applies to last frame added).
-	 *
-	 * @param ms
-	 *          int delay time in milliseconds
-	 */
-	public void setDelay(int ms) {
-		delay = ms / 10;
-	}
-
-	/**
-	 * Sets the GIF frame disposal code for the last added frame and any
-	 * subsequent frames. Default is 0 if no transparent color has been set,
-	 * otherwise 2.
-	 *
-	 * @param code
-	 *          int disposal code.
-	 */
-	public void setDispose(int code) {
-		if (code >= 0) {
-			dispose = code;
-		}
-	}
-
-	/**
-	 * Sets the number of times the set of GIF frames should be played. Default is
-	 * 1; 0 means play indefinitely. Must be invoked before the first image is
-	 * added.
-	 *
-	 * @param iter
-	 *          int number of iterations.
-	 * @return
-	 */
-	public void setRepeat(int iter) {
-		if (iter >= 0) {
-			repeat = iter;
-		}
-	}
-
-	/**
-	 * Sets the transparent color for the last added frame and any subsequent
-	 * frames. Since all colors are subject to modification in the quantization
-	 * process, the color in the final palette for each frame closest to the given
-	 * color becomes the transparent color for that frame. May be set to null to
-	 * indicate no transparent color.
-	 *
-	 * @param c
-	 *          Color to be treated as transparent on display.
-	 */
-	public void setTransparent(int c) {
-		transparent = c;
-	}
 
 	/**
 	 * Adds next GIF frame. The frame is not written immediately, but is actually
@@ -248,9 +194,9 @@ public class AnimatedGifEncoder {
 	 * Sets the GIF frame position. The position is 0,0 by default.
 	 * Useful for only updating a section of the image
 	 *
-	 * @param w
+	 * @param// w
 	 *          int frame width.
-	 * @param h
+	 * @param //h
 	 *          int frame width.
 	 */
 	public void setPosition(int x, int y) {
@@ -279,46 +225,6 @@ public class AnimatedGifEncoder {
 		}
 		return started = ok;
 	}
-
-	/*
-	 * NeuQuant Neural-Net Quantization Algorithm
-	 * ------------------------------------------
-	 *
-	 * Copyright (c) 1994 Anthony Dekker
-	 *
-	 * NEUQUANT Neural-Net quantization algorithm by Anthony Dekker, 1994. See
-	 * "Kohonen neural networks for optimal colour quantization" in "Network:
-	 * Computation in Neural Systems" Vol. 5 (1994) pp 351-367. for a discussion of
-	 * the algorithm.
-	 *
-	 * Any party obtaining a copy of these files from the author, directly or
-	 * indirectly, is granted, free of charge, a full and unrestricted irrevocable,
-	 * world-wide, paid up, royalty-free, nonexclusive right and license to deal in
-	 * this software and documentation files (the "Software"), including without
-	 * limitation the rights to use, copy, modify, merge, publish, distribute,
-	 * sublicense, and/or sell copies of the Software, and to permit persons who
-	 * receive copies from any such party to do so, with the only requirement being
-	 * that this copyright notice remain intact.
-	 */
-
-	//	 Ported to Java 12/00 K Weiner
-
-	// this method is in NEUQUANT
-	public byte[] colorMap(int[][] network) {
-		byte[] map = new byte[3 * netsize];
-		int[] index = new int[netsize];
-		for (int i = 0; i < netsize; i++)
-			index[network[i][3]] = i;
-		int k = 0;
-		for (int i = 0; i < netsize; i++) {
-			int j = index[i];
-			map[k++] = (byte) (network[j][0]);
-			map[k++] = (byte) (network[j][1]);
-			map[k++] = (byte) (network[j][2]);
-		}
-		return map;
-	}
-
 	/**
 	 * Analyzes image colors and creates color map.
 	 */
@@ -326,20 +232,7 @@ public class AnimatedGifEncoder {
 		int len = pixels.length;
 		int nPix = len / 3;
 		indexedPixels = new byte[nPix];
-		//NeuQuant nq = new NeuQuant(pixels, len, sample);
-		// initialize quantizer
-		//colorTab = nq.process(); // create reduced palette
-
-		int[] a = getColorTab(pixels, len, sample);
-		int[][] network = new int[256][4];
-
-		int nn = 0;
-		for(int i = 0; i < 256; i++){
-			for(int j = 0; j < 4; j++)
-				network[i][j] = a[nn++];
-		}
-
-		colorTab = colorMap(network);
+		colorTab = getColorTab(pixels, len, sample);
 
 		// convert map from BGR to RGB
 		for (int i = 0; i < colorTab.length; i += 3) {

@@ -40,8 +40,8 @@ public class FrameCapturer {
         long seconds = duration - (hours * 3600 + minutes * 60) ;
         int nTime = 1;
         Bitmap backgroundBitmap = null;
-        while( nTime <= seconds ) {
-            Bitmap bitmap = m.getFrameAtTime(nTime * 1000000);// picture의 높이가 넓이보다 크면 90도 로테이션되서 bitmap에 담김
+        while( nTime <= seconds * 2 ) {
+            Bitmap bitmap = m.getFrameAtTime(nTime * 500000);
             Bitmap resized = Bitmap.createScaledBitmap(bitmap, Math.round(width / 2), Math.round(height / 2), true);
             if (backgroundBitmap == null) {
                 backgroundBitmap = Bitmap.createBitmap(resized);
@@ -79,7 +79,15 @@ public class FrameCapturer {
 
         for (Bitmap bitmap : bitmapArrayList) {
             sendProgress(bitmapArrayList.size() - 1, bitmapArrayList.indexOf(bitmap));
+            long start = System.currentTimeMillis();
+
             encoder.addFrame(bitmap);
+
+            long end = System.currentTimeMillis();
+
+            System.out.println( "실행 시간 : " + ( end - start )/1000.0 );
+
+
         }
         encoder.finish();
 

@@ -14,7 +14,7 @@ extern "C" {
  * Method:    getColorTab
  * Signature: ([BII)[I
  */
-JNIEXPORT jintArray JNICALL Java_com_cinemagra_holymoly_cinemagraph_AnimatedGifEncoder_getColorTab
+JNIEXPORT jbyteArray JNICALL Java_com_cinemagra_holymoly_cinemagraph_AnimatedGifEncoder_getColorTab
   (JNIEnv *, jobject, jbyteArray, jint, jint);
 
 /*
