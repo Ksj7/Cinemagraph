@@ -1,2 +1,0 @@
-set solib-search-path ./obj/local/armeabi-v7a
-directory /Users/mac/Library/Android/sdk/ndk-bundle/sysroot /Users/mac/Library/Android/sdk/ndk-bundle/sources/cxx-stl/system/include jni

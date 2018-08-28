@@ -24,6 +24,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.jcodec.api.JCodecException;
+
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
@@ -141,8 +143,9 @@ public class MainActivity extends AppCompatActivity {
         MyHandler handler = new MyHandler();
         FrameCapturer frameCapturer = new FrameCapturer();
         try {
-            frameCapturer.run(getApplicationContext(),uri, position, handler, customizedWidth, customizedHeight);
-        } catch (IOException e) {
+            //frameCapturer.run(getApplicationContext(), uri, position, handler, customizedWidth, customizedHeight);
+            frameCapturer.run(path, position, handler, customizedWidth, customizedHeight);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
