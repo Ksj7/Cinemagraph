@@ -82,10 +82,10 @@ public class MainActivity extends AppCompatActivity {
         surfaceView = new MySurfaceView(getApplication(), fileUri);
         thumb = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Images.Thumbnails.MINI_KIND);
         layout.addView(surfaceView, 0);
-        if(thumb.getWidth() >= thumb.getHeight()){
+        if (thumb.getWidth() >= thumb.getHeight()) {
             customizedHeight = thumb.getHeight() * (deviceWidth / thumb.getWidth());
             customizedWidth = deviceWidth;
-        }else{
+        } else {
             customizedWidth = thumb.getWidth() * (deviceHeight / thumb.getHeight());
             customizedHeight = deviceHeight;
         }
@@ -140,9 +140,10 @@ public class MainActivity extends AppCompatActivity {
         position[3] = bottom;
         MyHandler handler = new MyHandler();
         FrameCapturer frameCapturer = new FrameCapturer();
+
         try {
-            frameCapturer.run(getApplicationContext(),uri, position, handler, customizedWidth, customizedHeight);
-        } catch (IOException e) {
+            frameCapturer.run(getApplicationContext(), uri, position, handler, customizedWidth, customizedHeight);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
