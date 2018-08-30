@@ -15,7 +15,7 @@ extern "C" {
  * Signature: ([BII)[I
  */
 JNIEXPORT jbyteArray JNICALL Java_com_cinemagra_holymoly_cinemagraph_AnimatedGifEncoder_getColorTab
-  (JNIEnv *, jobject, jbyteArray, jint, jint);
+        (JNIEnv *, jobject, jbyteArray, jint, jint);
 
 /*
  * Class:     com_cinemagra_holymoly_cinemagraph_AnimatedGifEncoder
@@ -23,7 +23,11 @@ JNIEXPORT jbyteArray JNICALL Java_com_cinemagra_holymoly_cinemagraph_AnimatedGif
  * Signature: (III)I
  */
 JNIEXPORT jint JNICALL Java_com_cinemagra_holymoly_cinemagraph_AnimatedGifEncoder_getIndex
-  (JNIEnv *, jobject, jint, jint, jint);
+        (JNIEnv *, jobject, jint, jint, jint);
+
+JNIEXPORT void JNICALL
+Java_com_cinemagra_holymoly_cinemagraph_AnimatedGifEncoder_encode(JNIEnv *, jobject,
+                                                                  jint, jint, jbyteArray, jint);
 
 #ifdef __cplusplus
 }

@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private int customizedWidth;
     private int customizedHeight;
     private Bitmap thumb;
+    static int i = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,9 +141,11 @@ public class MainActivity extends AppCompatActivity {
         position[3] = bottom;
         MyHandler handler = new MyHandler();
         FrameCapturer frameCapturer = new FrameCapturer();
+
         try {
-            frameCapturer.run(getApplicationContext(),uri, position, handler, customizedWidth, customizedHeight);
-        } catch (IOException e) {
+            frameCapturer.run(getApplicationContext(),uri, position, handler, customizedWidth, customizedHeight,i++);
+            //frameCapturer.run(path, position, handler, customizedWidth, customizedHeight);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
