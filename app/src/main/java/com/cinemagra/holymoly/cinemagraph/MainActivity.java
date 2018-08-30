@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     private int customizedWidth;
     private int customizedHeight;
     private Bitmap thumb;
-    static int i = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +82,10 @@ public class MainActivity extends AppCompatActivity {
         surfaceView = new MySurfaceView(getApplication(), fileUri);
         thumb = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Images.Thumbnails.MINI_KIND);
         layout.addView(surfaceView, 0);
-        if(thumb.getWidth() >= thumb.getHeight()){
+        if (thumb.getWidth() >= thumb.getHeight()) {
             customizedHeight = thumb.getHeight() * (deviceWidth / thumb.getWidth());
             customizedWidth = deviceWidth;
-        }else{
+        } else {
             customizedWidth = thumb.getWidth() * (deviceHeight / thumb.getHeight());
             customizedHeight = deviceHeight;
         }
@@ -143,8 +142,7 @@ public class MainActivity extends AppCompatActivity {
         FrameCapturer frameCapturer = new FrameCapturer();
 
         try {
-            frameCapturer.run(getApplicationContext(),uri, position, handler, customizedWidth, customizedHeight,i++);
-            //frameCapturer.run(path, position, handler, customizedWidth, customizedHeight);
+            frameCapturer.run(getApplicationContext(), uri, position, handler, customizedWidth, customizedHeight);
         } catch (Exception e) {
             e.printStackTrace();
         }
