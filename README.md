@@ -12,3 +12,11 @@ Process바가 다 찰 때까지 기다리면 test.gif라는 이름으로 파일�
 
 ### VIEW GIF
 gif 뷰어가 없을 경우, 이 버튼을 눌러서 확인 가능
+
+### Android GIF 인코더 속도 향상 
+1. AnimatedGifEncoder 속도를 향상하기 위해 NeuQuant 알고리즘와 LZW 압축 알고리즘을 native 코드로 전환함 (gifflen 사용, http://jiggawatt.org/badc0de/android/#gifflen)
+2. NeqQuant에서 컬러 매핑시 캐쉬 사용
+
+ 결과 : 8초 Video의 경우
+ original version -> 7.086
+ modifed version -> 1.541 ~ 0.91
